@@ -11,6 +11,10 @@ coverage/
 screenshots/
 .playwright-mcp/
 
+# Claude Code per-machine settings and session worktrees
+.claude/settings.local.json
+.claude/worktrees/
+
 # Environment variables
 .env
 .env.local
