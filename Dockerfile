@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 # Cache all dependencies including routes and components
-RUN deno cache --reload main.ts dev.ts routes/*.tsx components/*.tsx fresh.config.ts
+RUN deno cache --reload main.ts dev.ts routes/*.tsx components/*.tsx
 
 # Build the Fresh app for production
 RUN deno run -A dev.ts build

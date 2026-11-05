@@ -1,9 +1,8 @@
 export const title = "Debug Page - Microgrid Foundry";
 
-import { PageProps } from "fresh";
 import { getComponentVersions } from "../lib/versions.ts";
 
-export default async function DebugPage(props: PageProps) {
+export default async function DebugPage() {
   // Access control: only show if ENABLE_DEBUG_PAGE is not explicitly set to "false"
   const enableDebug = Deno.env.get("ENABLE_DEBUG_PAGE");
   if (enableDebug === "false") {
@@ -12,9 +11,7 @@ export default async function DebugPage(props: PageProps) {
 
   // Detect environment
   const isProduction = Deno.env.get("DENO_DEPLOY") === "true";
-  const environmentBadge = isProduction
-    ? "🚀 PRODUCTION"
-    : "💻 DEVELOPMENT";
+  const environmentBadge = isProduction ? "🚀 PRODUCTION" : "💻 DEVELOPMENT";
   const badgeClasses = isProduction
     ? "px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-300"
     : "px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 border border-blue-300";
@@ -33,7 +30,8 @@ export default async function DebugPage(props: PageProps) {
   const tailwindConfig = {
     "Version": "4.1.10+",
     "Content Paths": "{routes,islands,components}/**/*.{ts,tsx}",
-    "Custom Colors - Primary": "#3b82f6 (blue-500), #2563eb (blue-600), #1d4ed8 (blue-700)",
+    "Custom Colors - Primary":
+      "#3b82f6 (blue-500), #2563eb (blue-600), #1d4ed8 (blue-700)",
     "Custom Colors - Accent": "#10b981 (green-500), #059669 (green-600)",
     "Plugins": "none",
   };
@@ -50,9 +48,13 @@ export default async function DebugPage(props: PageProps) {
 
   // Email service configuration (securely masked)
   const emailConfig = {
-    "RESEND_API_KEY": Deno.env.get("RESEND_API_KEY") ? "✓ Set (hidden)" : "✗ Not set",
-    "RESEND_FROM_EMAIL": Deno.env.get("RESEND_FROM_EMAIL") || "not set (will use default: onboarding@resend.dev)",
-    "CONTACT_EMAIL": Deno.env.get("CONTACT_EMAIL") || "not set (will use default: hello@microgridfoundry.co.uk)",
+    "RESEND_API_KEY": Deno.env.get("RESEND_API_KEY")
+      ? "✓ Set (hidden)"
+      : "✗ Not set",
+    "RESEND_FROM_EMAIL": Deno.env.get("RESEND_FROM_EMAIL") ||
+      "not set (will use default: onboarding@resend.dev)",
+    "CONTACT_EMAIL": Deno.env.get("CONTACT_EMAIL") ||
+      "not set (will use default: hello@microgridfoundry.co.uk)",
   };
 
   // All environment variables (masked for security)
@@ -63,7 +65,9 @@ export default async function DebugPage(props: PageProps) {
   }
 
   // Sort alphabetically
-  const sortedEnvVars = Object.entries(allEnvVars).sort(([a], [b]) => a.localeCompare(b));
+  const sortedEnvVars = Object.entries(allEnvVars).sort(([a], [b]) =>
+    a.localeCompare(b)
+  );
 
   return (
     <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
@@ -87,7 +91,9 @@ export default async function DebugPage(props: PageProps) {
 
         {/* Runtime Versions Section */}
         <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Runtime & Versions</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">
+            Runtime & Versions
+          </h2>
           <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
             <table class="w-full">
               <tbody>
@@ -166,43 +172,68 @@ export default async function DebugPage(props: PageProps) {
 
           {/* Color Swatches */}
           <div class="mt-4 bg-white rounded-lg shadow-md border border-slate-200 p-4">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Custom Theme Colors</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">
+              Custom Theme Colors
+            </h3>
             <div class="space-y-3">
               <div>
-                <p class="text-sm font-semibold text-gray-700 mb-2">Primary (Blues)</p>
+                <p class="text-sm font-semibold text-gray-700 mb-2">
+                  Primary (Blues)
+                </p>
                 <div class="flex gap-2 flex-wrap">
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-primary-50 border border-gray-300 rounded"></div>
+                    <div class="w-12 h-12 bg-primary-50 border border-gray-300 rounded">
+                    </div>
                     <span class="ml-2 text-xs font-mono text-gray-600">50</span>
                   </div>
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-primary-100 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">100</span>
+                    <div class="w-12 h-12 bg-primary-100 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      100
+                    </span>
                   </div>
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-primary-500 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">500</span>
+                    <div class="w-12 h-12 bg-primary-500 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      500
+                    </span>
                   </div>
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-primary-600 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">600</span>
+                    <div class="w-12 h-12 bg-primary-600 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      600
+                    </span>
                   </div>
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-primary-700 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">700</span>
+                    <div class="w-12 h-12 bg-primary-700 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      700
+                    </span>
                   </div>
                 </div>
               </div>
               <div>
-                <p class="text-sm font-semibold text-gray-700 mb-2">Accent (Greens)</p>
+                <p class="text-sm font-semibold text-gray-700 mb-2">
+                  Accent (Greens)
+                </p>
                 <div class="flex gap-2 flex-wrap">
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-accent-500 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">500</span>
+                    <div class="w-12 h-12 bg-accent-500 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      500
+                    </span>
                   </div>
                   <div class="flex items-center">
-                    <div class="w-12 h-12 bg-accent-600 border border-gray-300 rounded"></div>
-                    <span class="ml-2 text-xs font-mono text-gray-600">600</span>
+                    <div class="w-12 h-12 bg-accent-600 border border-gray-300 rounded">
+                    </div>
+                    <span class="ml-2 text-xs font-mono text-gray-600">
+                      600
+                    </span>
                   </div>
                 </div>
               </div>
@@ -212,7 +243,9 @@ export default async function DebugPage(props: PageProps) {
 
         {/* Deno Deploy Environment Section */}
         <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Deno Deploy Environment</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">
+            Deno Deploy Environment
+          </h2>
           <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
             <table class="w-full">
               <tbody>
@@ -274,9 +307,17 @@ export default async function DebugPage(props: PageProps) {
                     Email service not configured
                   </p>
                   <p class="text-sm text-yellow-700">
-                    To enable the contact form, set the <code class="bg-yellow-100 px-1 py-0.5 rounded">RESEND_API_KEY</code> environment variable.
-                    Get your API key from{" "}
-                    <a href="https://resend.com" target="_blank" rel="noopener noreferrer" class="underline hover:text-yellow-900">
+                    To enable the contact form, set the{" "}
+                    <code class="bg-yellow-100 px-1 py-0.5 rounded">
+                      RESEND_API_KEY
+                    </code>{" "}
+                    environment variable. Get your API key from{" "}
+                    <a
+                      href="https://resend.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline hover:text-yellow-900"
+                    >
                       resend.com
                     </a>.
                   </p>

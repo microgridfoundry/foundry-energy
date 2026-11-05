@@ -1,4 +1,4 @@
-import { Handlers } from "fresh";
+import type { HandlerByMethod } from "fresh";
 import { Resend } from "resend";
 
 // Simple in-memory rate limiting (for production, use Redis or similar)
@@ -12,7 +12,9 @@ function getRateLimitKey(ip: string): string {
   return `contact_${ip}`;
 }
 
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetTime: number } {
+function checkRateLimit(
+  ip: string,
+): { allowed: boolean; remaining: number; resetTime: number } {
   const key = getRateLimitKey(ip);
   const now = Date.now();
   const record = rateLimitMap.get(key);
@@ -29,7 +31,11 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number; rese
   }
 
   record.count++;
-  return { allowed: true, remaining: MAX_REQUESTS - record.count, resetTime: record.resetTime };
+  return {
+    allowed: true,
+    remaining: MAX_REQUESTS - record.count,
+    resetTime: record.resetTime,
+  };
 }
 
 // Clean up old rate limit entries periodically
@@ -42,12 +48,11 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000); // Clean up every 5 minutes
 
-export const handler: Handlers = {
+export const handler: HandlerByMethod<unknown, unknown> = {
   async POST(ctx) {
     try {
-      // In Fresh, the first parameter is the context object
-      // The actual Request object is at ctx.req
-      const req = (ctx as any).req as Request;
+      // Fresh 2.x: handlers take a single context argument; the Request is ctx.req
+      const req = ctx.req;
 
       if (!req) {
         console.error("No request object found in context");
@@ -59,7 +64,7 @@ export const handler: Handlers = {
           {
             status: 400,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -69,28 +74,32 @@ export const handler: Handlers = {
         return new Response(
           JSON.stringify({
             success: false,
-            error: "Server configuration error. Please contact the administrator.",
+            error:
+              "Server configuration error. Please contact the administrator.",
           }),
           {
             status: 500,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
       // Check for Resend API key early
       const resendApiKey = Deno.env.get("RESEND_API_KEY");
       if (!resendApiKey || resendApiKey.trim() === "") {
-        console.error("RESEND_API_KEY environment variable is not set or is empty");
+        console.error(
+          "RESEND_API_KEY environment variable is not set or is empty",
+        );
         return new Response(
           JSON.stringify({
             success: false,
-            error: "Email service is not configured. Please set the RESEND_API_KEY environment variable. Visit /debug to check configuration.",
+            error:
+              "Email service is not configured. Please set the RESEND_API_KEY environment variable. Visit /debug to check configuration.",
           }),
           {
             status: 503,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -106,7 +115,8 @@ export const handler: Handlers = {
         return new Response(
           JSON.stringify({
             success: false,
-            error: `Rate limit exceeded. Please try again after ${resetDate.toLocaleTimeString()}.`,
+            error:
+              `Rate limit exceeded. Please try again after ${resetDate.toLocaleTimeString()}.`,
             resetTime: rateLimit.resetTime,
           }),
           {
@@ -117,7 +127,7 @@ export const handler: Handlers = {
               "X-RateLimit-Remaining": "0",
               "X-RateLimit-Reset": rateLimit.resetTime.toString(),
             },
-          }
+          },
         );
       }
 
@@ -140,7 +150,7 @@ export const handler: Handlers = {
           {
             status: 200,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -154,7 +164,7 @@ export const handler: Handlers = {
           {
             status: 400,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -169,13 +179,15 @@ export const handler: Handlers = {
           {
             status: 400,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
       // Get recipient email (defaults to a fallback)
-      const toEmail = Deno.env.get("CONTACT_EMAIL") || "hello@microgridfoundry.co.uk";
-      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
+      const toEmail = Deno.env.get("CONTACT_EMAIL") ||
+        "hello@microgridfoundry.co.uk";
+      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") ||
+        "onboarding@resend.dev";
 
       // Initialize Resend with error handling
       let resend;
@@ -186,12 +198,13 @@ export const handler: Handlers = {
         return new Response(
           JSON.stringify({
             success: false,
-            error: "Failed to initialize email service. Please check your RESEND_API_KEY is valid.",
+            error:
+              "Failed to initialize email service. Please check your RESEND_API_KEY is valid.",
           }),
           {
             status: 500,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -199,11 +212,11 @@ export const handler: Handlers = {
       let data, error;
       try {
         const result = await resend.emails.send({
-        from: fromEmail,
-        to: toEmail,
-        reply_to: email,
-        subject: `New Contact Form Enquiry from ${name}`,
-        html: `
+          from: fromEmail,
+          to: toEmail,
+          replyTo: email,
+          subject: `New Contact Form Enquiry from ${name}`,
+          html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 10px;">
               New Contact Form Enquiry
@@ -238,12 +251,13 @@ export const handler: Handlers = {
         return new Response(
           JSON.stringify({
             success: false,
-            error: "Failed to send email. The email service may be temporarily unavailable. Please try again later.",
+            error:
+              "Failed to send email. The email service may be temporarily unavailable. Please try again later.",
           }),
           {
             status: 500,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -252,12 +266,13 @@ export const handler: Handlers = {
         return new Response(
           JSON.stringify({
             success: false,
-            error: "Failed to send email. Please try again later or contact us directly.",
+            error:
+              "Failed to send email. Please try again later or contact us directly.",
           }),
           {
             status: 500,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       }
 
@@ -266,7 +281,8 @@ export const handler: Handlers = {
       return new Response(
         JSON.stringify({
           success: true,
-          message: "Thank you for your enquiry! We'll get back to you as soon as possible.",
+          message:
+            "Thank you for your enquiry! We'll get back to you as soon as possible.",
         }),
         {
           status: 200,
@@ -276,16 +292,18 @@ export const handler: Handlers = {
             "X-RateLimit-Remaining": rateLimit.remaining.toString(),
             "X-RateLimit-Reset": rateLimit.resetTime.toString(),
           },
-        }
+        },
       );
     } catch (error) {
       console.error("Error processing contact form:", error);
 
       // Provide more specific error messages based on error type
-      let errorMessage = "An unexpected error occurred. Please try again later.";
+      let errorMessage =
+        "An unexpected error occurred. Please try again later.";
 
       if (error instanceof TypeError) {
-        errorMessage = "Configuration error detected. Please ensure all environment variables are properly set. Visit /debug to check your configuration.";
+        errorMessage =
+          "Configuration error detected. Please ensure all environment variables are properly set. Visit /debug to check your configuration.";
       } else if (error instanceof Error) {
         // Log the actual error for debugging but don't expose internal details to users
         console.error("Error details:", error.message, error.stack);
@@ -299,7 +317,7 @@ export const handler: Handlers = {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
   },

@@ -13,19 +13,6 @@ interface ComponentVersions {
 }
 
 /**
- * Extract version from JSR or NPM import specifier
- * Examples:
- *   "jsr:@fresh/core@2.1.4" → "2.1.4"
- *   "npm:preact@^10.27.0" → "^10.27.0"
- *   "jsr:@fresh/plugin-tailwind@1.0.0" → "1.0.0"
- */
-function extractVersion(importSpec: string): string {
-  // Match version after @ symbol
-  const match = importSpec.match(/@([^@]+)$/);
-  return match ? match[1] : importSpec;
-}
-
-/**
  * Read and parse deno.json to extract component versions
  * This function is cached at module load time for performance.
  */
@@ -53,17 +40,20 @@ async function loadComponentVersions(): Promise<ComponentVersions> {
       }
 
       // Create friendly display name
-      const displayName = key === "fresh" ? "Fresh" :
-                         key === "preact" ? "Preact" :
-                         key === "tailwindcss" ? "Tailwind CSS" :
-                         key === "postcss" ? "PostCSS" :
-                         key;
+      const displayName = key === "fresh"
+        ? "Fresh"
+        : key === "preact"
+        ? "Preact"
+        : key === "tailwindcss"
+        ? "Tailwind CSS"
+        : key === "postcss"
+        ? "PostCSS"
+        : key;
 
       versions[displayName] = value;
     }
 
     return versions;
-
   } catch (error) {
     console.error("Failed to load component versions from deno.json:", error);
 
@@ -91,7 +81,9 @@ export async function getComponentVersions(): Promise<ComponentVersions> {
  * @param name - The component name (e.g., "Fresh", "Preact")
  * @returns The version string, or undefined if not found
  */
-export async function getComponentVersion(name: string): Promise<string | undefined> {
+export async function getComponentVersion(
+  name: string,
+): Promise<string | undefined> {
   const versions = await getComponentVersions();
   return versions[name];
 }

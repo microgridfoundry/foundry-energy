@@ -6,7 +6,9 @@ interface ContactFormProps {
 
 export default function ContactForm({ className = "" }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<
+    { type: "success" | "error"; text: string } | null
+  >(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,13 +37,17 @@ export default function ContactForm({ className = "" }: ContactFormProps) {
         setFormData({ name: "", email: "", enquiry: "" });
         form.reset();
       } else {
-        setMessage({ type: "error", text: data.error || "Something went wrong. Please try again." });
+        setMessage({
+          type: "error",
+          text: data.error || "Something went wrong. Please try again.",
+        });
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setMessage({
         type: "error",
-        text: "Failed to send message. Please check your connection and try again.",
+        text:
+          "Failed to send message. Please check your connection and try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -147,37 +153,40 @@ export default function ContactForm({ className = "" }: ContactFormProps) {
               : "hover:bg-yellow-600"
           }`}
         >
-          {isSubmitting ? (
-            <span class="flex items-center justify-center">
-              <svg
-                class="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                />
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              Sending...
-            </span>
-          ) : (
-            "Send"
-          )}
+          {isSubmitting
+            ? (
+              <span class="flex items-center justify-center">
+                <svg
+                  class="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  />
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Sending...
+              </span>
+            )
+            : (
+              "Send"
+            )}
         </button>
 
         <p class="text-xs text-gray-500 mt-4">
-          By submitting this form, you agree to our privacy policy. We'll only use your information to respond to your enquiry.
+          By submitting this form, you agree to our privacy policy. We'll only
+          use your information to respond to your enquiry.
         </p>
       </form>
     </div>
