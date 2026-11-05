@@ -20,7 +20,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#what-we-do"
+                  href="/#what-we-do"
                   className="text-gray-300 hover:text-white transition duration-200"
                 >
                   About
@@ -28,7 +28,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="#communities"
+                  href="/#communities"
                   className="text-gray-300 hover:text-white transition duration-200"
                 >
                   Communities
@@ -72,7 +72,7 @@ export default function Footer() {
           <p className="text-gray-400">
             Powered by{" "}
             <a
-              href="https://simtricity.io"
+              href="https://simtricity.ai"
               className="text-blue-400 hover:text-blue-300 transition duration-200"
             >
               Simtricity Energy Communities platform

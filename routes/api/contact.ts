@@ -8,6 +8,16 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
 const MAX_REQUESTS = 3; // Max 3 submissions per hour per IP
 
+// Escape user-supplied text before interpolating it into the email HTML
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function getRateLimitKey(ip: string): string {
   return `contact_${ip}`;
 }
@@ -224,21 +234,27 @@ export const handler: HandlerByMethod<unknown, unknown> = {
 
             <div style="margin: 20px 0;">
               <p style="margin: 10px 0;">
-                <strong style="color: #374151;">Name:</strong> ${name}
+                <strong style="color: #374151;">Name:</strong> ${
+            escapeHtml(name)
+          }
               </p>
               <p style="margin: 10px 0;">
                 <strong style="color: #374151;">Email:</strong>
-                <a href="mailto:${email}" style="color: #3b82f6;">${email}</a>
+                <a href="mailto:${escapeHtml(email)}" style="color: #3b82f6;">${
+            escapeHtml(email)
+          }</a>
               </p>
             </div>
 
             <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
               <strong style="color: #374151;">Enquiry:</strong>
-              <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${enquiry}</p>
+              <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${
+            escapeHtml(enquiry)
+          }</p>
             </div>
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">
-              <p>Submitted from: ${ip}</p>
+              <p>Submitted from: ${escapeHtml(ip)}</p>
               <p>Time: ${new Date().toISOString()}</p>
             </div>
           </div>
