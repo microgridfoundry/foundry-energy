@@ -19,7 +19,7 @@ export default function Contact() {
               Get Started
             </a>
             <a
-              href="https://simtricity.io"
+              href="https://simtricity.ai"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-gray-900 px-8 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition duration-200"

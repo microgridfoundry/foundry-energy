@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-deno.lock
 
 # Fresh build cache
 _fresh/

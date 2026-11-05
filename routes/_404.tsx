@@ -1,4 +1,10 @@
+import { page, type RouteHandler } from "fresh";
+
 export const title = "404 - Page not found";
+
+// Return a real 404 status (Fresh otherwise serves this page as 200)
+export const handler: RouteHandler<unknown, unknown> = () =>
+  page(undefined, { status: 404 });
 
 export default function Error404() {
   return (
