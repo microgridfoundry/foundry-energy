@@ -10,7 +10,9 @@ export default async function DebugPage() {
   }
 
   // Detect environment
-  const isProduction = Deno.env.get("DENO_DEPLOY") === "true";
+  // Production on Deno Deploy (DENO_DEPLOY) or Fly.io (FLY_APP_NAME)
+  const isProduction = Deno.env.get("DENO_DEPLOY") === "true" ||
+    Boolean(Deno.env.get("FLY_APP_NAME"));
   const environmentBadge = isProduction ? "🚀 PRODUCTION" : "💻 DEVELOPMENT";
   const badgeClasses = isProduction
     ? "px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-300"

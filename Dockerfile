@@ -1,20 +1,17 @@
-FROM denoland/deno:2.4.4
+FROM denoland/deno:2.9.7
 
 WORKDIR /app
 
-# Copy source code
+# Install dependencies exactly as pinned in deno.lock (cached layer)
+COPY deno.json deno.lock ./
+RUN deno install --frozen
+
+# Copy source and build the Fresh app for production.
+# static/ must stay in the image: images are served from it at runtime.
 COPY . .
+RUN deno task build
 
-# Cache all dependencies including routes and components
-RUN deno cache --reload main.ts dev.ts routes/*.tsx components/*.tsx
-
-# Build the Fresh app for production
-RUN deno run -A dev.ts build
-
-# The port that your application listens to
 ENV PORT=8000
-
 EXPOSE 8000
 
-# Run the built app with deno serve
 CMD ["serve", "-A", "--port=8000", "_fresh/server.js"]
