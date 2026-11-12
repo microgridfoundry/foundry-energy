@@ -25,15 +25,15 @@ Dependencies are pinned through `deno.lock` (committed). After changing
 
 ## Deployment
 
-The site is mid-migration from Deno Deploy to Fly.io. Both hosts run the same
-code until `microgridfoundry.uk` is cut over.
-
-**Fly.io — the future home** (app `foundry-energy-mgf`, org `microgridfoundry`,
-region `lhr`)
+Production runs on **Fly.io** only (app `foundry-energy-mgf`, org
+`microgridfoundry`, region `lhr`).
 
 - Serves https://foundry.energy and https://www.foundry.energy (Fly certs; DNS
   in DNSimple: apex A `66.241.125.129` / AAAA `2a09:8280:1::1ff:bc4:0`, `www`
   CNAME → `foundry-energy-mgf.fly.dev`).
+- `microgridfoundry.uk` and `www.microgridfoundry.uk` are DNSimple URL records
+  that 301 to https://foundry.energy, keeping the path. Keep the domain
+  registered — old links and mail depend on it.
 - Deploys are **manual** for now:
   `fly deploy -a foundry-energy-mgf --remote-only` (no GitHub Action yet).
   Merging to `main` does NOT deploy to Fly.
@@ -43,15 +43,12 @@ region `lhr`)
 - No secrets yet, so the contact form returns 503 there. Plan: Doppler project
   `foundry-energy-mgf` (`local`/`prev`/`prod`) with native Fly sync.
 
-**Deno Deploy — current public site** (app `microgridfoundry-uk`, org `simt`)
+There are no branch previews. Test locally (`PORT=8770 deno task dev`) before
+deploying; if previews are needed, add a `foundry-energy-mgf-prev` app.
 
-- Push / merge to `main` → production at https://www.microgridfoundry.uk/
-- Push any other branch → preview at
-  `https://microgridfoundry-uk--<branch>.simt.deno.net`
-- Retire after cut-over: point `microgridfoundry.uk` at the Fly app with a
-  path-preserving 301 to `www.foundry.energy`, then remove the Deno app.
-
-The old Fly app `microgridfoundry-uk` was destroyed on 2026-11-12.
+History: the site ran on Deno Deploy (app `microgridfoundry-uk`, org `simt`)
+until the 2026-11-12 cut-over; that app and the old Fly app of the same name
+have both been deleted.
 
 **Gotcha — build inside a dot-directory.** Fresh's build skips `static/` when
 the repo path contains a folder starting with `.` (e.g. a worktree under
