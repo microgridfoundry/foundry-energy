@@ -1,5 +1,5 @@
+# Keep .gitignore in the image: Tailwind uses it to skip node_modules when scanning for classes
 .git
-.gitignore
 .github
 .claude
 .playwright-mcp
