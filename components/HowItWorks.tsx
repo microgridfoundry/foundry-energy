@@ -29,7 +29,7 @@ export default function HowItWorks() {
               Build Smart
             </h3>
             <p className="text-gray-600">
-              Solar, batteries, and smart meters create your microgrid
+              Solar, batteries, and smart meters create your smart grid
             </p>
           </div>
 

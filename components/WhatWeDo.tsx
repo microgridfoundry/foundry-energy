@@ -10,7 +10,7 @@ export default function WhatWeDo() {
             Operating Tomorrow's Energy Communities Today
           </h3>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Microgrid Foundry operates community-owned energy systems in the
+            The Foundry operates community-owned energy systems in the
             South-West of the UK. We handle the complex technical and regulatory
             work so communities can enjoy the benefits of clean, affordable
             local energy.
@@ -63,9 +63,8 @@ export default function WhatWeDo() {
               For Housing Developers and Housing Associations
             </h3>
             <p className="text-gray-600">
-              We offer fallback microgrid system Operator for microgrid
-              communities to step in if something happens with your primary
-              Operator.
+              We act as a fallback Operator for community smart grids, ready to
+              step in if something happens with your primary Operator.
             </p>
           </div>
 

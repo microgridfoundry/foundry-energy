@@ -1,4 +1,4 @@
-export const title = "Debug Page - Microgrid Foundry";
+export const title = "Debug Page - The Foundry";
 
 import { getComponentVersions } from "../lib/versions.ts";
 
@@ -56,7 +56,7 @@ export default async function DebugPage() {
     "RESEND_FROM_EMAIL": Deno.env.get("RESEND_FROM_EMAIL") ||
       "not set (will use default: onboarding@resend.dev)",
     "CONTACT_EMAIL": Deno.env.get("CONTACT_EMAIL") ||
-      "not set (will use default: hello@microgridfoundry.co.uk)",
+      "not set (will use default: hello@foundry.energy)",
   };
 
   // All environment variables (masked for security)
@@ -369,7 +369,7 @@ export default async function DebugPage() {
 
         {/* Footer */}
         <footer class="text-center text-sm text-gray-600 mt-12 pb-4">
-          <p>Microgrid Foundry Debug Page</p>
+          <p>The Foundry Debug Page</p>
           <p class="text-xs text-gray-500 mt-1">
             Generated at {new Date().toISOString()}
           </p>

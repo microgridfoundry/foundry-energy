@@ -1,5 +1,4 @@
-export const title =
-  "Microgrid Foundry - Powering Community Energy Independence";
+export const title = "The Foundry - Helping Communities Build Smart Grids";
 export const description =
   "Clean, affordable energy systems owned and controlled by communities. Operating smart local grids across the South-West of the UK.";
 
