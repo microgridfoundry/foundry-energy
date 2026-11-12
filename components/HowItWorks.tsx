@@ -29,7 +29,8 @@ export default function HowItWorks() {
               Build Smart
             </h3>
             <p className="text-gray-600">
-              Solar, batteries, and smart meters create your smart grid
+              Solar, batteries, and smart meters create your smart local energy
+              system
             </p>
           </div>
 

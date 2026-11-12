@@ -63,8 +63,9 @@ export default function WhatWeDo() {
               For Housing Developers and Housing Associations
             </h3>
             <p className="text-gray-600">
-              We act as a fallback Operator for community smart grids, ready to
-              step in if something happens with your primary Operator.
+              We act as a fallback Operator for community-owned smart local
+              energy systems, ready to step in if something happens with your
+              primary Operator.
             </p>
           </div>
 
