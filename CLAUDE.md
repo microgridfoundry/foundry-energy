@@ -5,10 +5,10 @@ code in this repository.
 
 ## Project Overview
 
-Microgrid Foundry website - a Fresh 2.x (Deno) website for a national operator
-of community-owned energy systems in the UK. The site showcases energy
-communities (Water Lilies in Bristol, Hazelmead in Bridport) and handles contact
-form submissions.
+The Foundry website (formerly Microgrid Foundry) - a Fresh 2.x (Deno) website
+for a national operator of community-owned energy systems in the UK. The site
+showcases energy communities (Water Lilies in Bristol, Hazelmead in Bridport)
+and handles contact form submissions.
 
 ## Build and Development Commands
 
@@ -25,15 +25,38 @@ Dependencies are pinned through `deno.lock` (committed). After changing
 
 ## Deployment
 
-Production is hosted on **Deno Deploy** (app `microgridfoundry-uk`, org `simt`).
+The site is mid-migration from Deno Deploy to Fly.io. Both hosts run the same
+code until `microgridfoundry.uk` is cut over.
+
+**Fly.io — the future home** (app `foundry-energy-mgf`, org `microgridfoundry`,
+region `lhr`)
+
+- Serves https://foundry.energy and https://www.foundry.energy (Fly certs; DNS
+  in DNSimple: apex A `66.241.125.129` / AAAA `2a09:8280:1::1ff:bc4:0`, `www`
+  CNAME → `foundry-energy-mgf.fly.dev`).
+- Deploys are **manual** for now:
+  `fly deploy -a foundry-energy-mgf --remote-only` (no GitHub Action yet).
+  Merging to `main` does NOT deploy to Fly.
+- Built from `Dockerfile`: Deno 2.9.7, `deno install --frozen`, then
+  `deno task build`. Keep `.gitignore` in the Docker context — Tailwind uses it
+  to skip `node_modules` when scanning for classes.
+- No secrets yet, so the contact form returns 503 there. Plan: Doppler project
+  `foundry-energy-mgf` (`local`/`prev`/`prod`) with native Fly sync.
+
+**Deno Deploy — current public site** (app `microgridfoundry-uk`, org `simt`)
 
 - Push / merge to `main` → production at https://www.microgridfoundry.uk/
 - Push any other branch → preview at
   `https://microgridfoundry-uk--<branch>.simt.deno.net`
-- Test changes on a branch preview before opening a PR to `main`.
+- Retire after cut-over: point `microgridfoundry.uk` at the Fly app with a
+  path-preserving 301 to `www.foundry.energy`, then remove the Deno app.
 
-The Fly.io files (`Dockerfile`, `fly.toml`, `deno task deploy`) are deprecated
-but deliberately kept — don't remove them.
+The old Fly app `microgridfoundry-uk` was destroyed on 2026-11-12.
+
+**Gotcha — build inside a dot-directory.** Fresh's build skips `static/` when
+the repo path contains a folder starting with `.` (e.g. a worktree under
+`.claude/worktrees/`). A production build there serves no CSS or images. Build
+from a normal path (or in Docker) when testing `deno task build`.
 
 ## Architecture
 
@@ -93,6 +116,19 @@ Keep served images web-sized (the Hazelmead JPG is 1600px wide). Higher-res
 masters live in `_assets_src/` (e.g. `hazelmead-people.jpg`, 2400px). Downscale
 camera originals to ~2400px JPEG before committing — never commit multi-MB
 files.
+
+## Brand and copy
+
+The operator trades as **The Foundry** (domain foundry.energy). Rules for site
+copy:
+
+- Never say "microgrid". The legal name "Microgrid Foundry Limited" appears only
+  in the footer company line ("…trading as The Foundry").
+- What we help build: **smart local energy systems**. Water Lilies and Hazelmead
+  may still be described in their own terms (smart grid, local grid).
+- Ownership: say **locally owned** alongside **community-owned**, and name local
+  authorities and housing associations as well as communities.
+- Keep "South-West" unbroken (`<span className="whitespace-nowrap">`).
 
 ## Links
 
