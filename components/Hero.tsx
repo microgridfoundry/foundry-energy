@@ -11,9 +11,9 @@ export default function Hero() {
             <span className="whitespace-nowrap">South-West</span>
           </p>
           <p className="text-lg text-gray-700 mb-10 max-w-2xl mx-auto">
-            We work with local communities who seek to own and operate local
-            renewable energy systems with solar generation, battery storage, and
-            smart distribution networks.
+            We work with communities, local authorities and housing associations
+            who want to own and operate local renewable energy systems with
+            solar generation, battery storage, and smart distribution networks.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

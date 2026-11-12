@@ -100,9 +100,11 @@ export default function WhyChooseUs() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Community Owned
+              Locally Owned
             </h3>
-            <p className="text-gray-600">Local ownership and control</p>
+            <p className="text-gray-600">
+              Owned by communities, councils or housing associations
+            </p>
           </div>
         </div>
       </div>

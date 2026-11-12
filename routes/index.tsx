@@ -1,7 +1,7 @@
 export const title =
   "The Foundry - Helping Communities Build Smart Local Energy Systems";
 export const description =
-  "Clean, affordable energy systems owned and controlled by communities. Operating smart local energy systems across the South-West of the UK.";
+  "Clean, affordable energy systems owned locally by communities, local authorities and housing associations. Operating smart local energy systems across the South-West of the UK.";
 
 import Nav from "../components/Nav.tsx";
 import Footer from "../components/Footer.tsx";

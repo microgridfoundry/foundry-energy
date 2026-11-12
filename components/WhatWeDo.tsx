@@ -10,11 +10,12 @@ export default function WhatWeDo() {
             Operating Tomorrow's Energy Communities Today
           </h3>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            The Foundry operates community-owned energy systems in the{" "}
-            <span className="whitespace-nowrap">South-West</span>{" "}
+            The Foundry operates community-owned and locally owned energy
+            systems in the <span className="whitespace-nowrap">South-West</span>
+            {" "}
             of the UK. We handle the complex technical and regulatory work so
-            communities can enjoy the benefits of clean, affordable local
-            energy.
+            communities, local authorities and housing associations can enjoy
+            the benefits of clean, affordable local energy.
           </p>
         </div>
 
@@ -37,7 +38,7 @@ export default function WhatWeDo() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              For Communities
+              For Communities and Local Authorities
             </h3>
             <p className="text-gray-600">
               Lower bills, renewable energy, local control
@@ -64,9 +65,9 @@ export default function WhatWeDo() {
               For Housing Developers and Housing Associations
             </h3>
             <p className="text-gray-600">
-              We act as a fallback Operator for community-owned smart local
-              energy systems, ready to step in if something happens with your
-              primary Operator.
+              We act as a fallback Operator for locally owned smart local energy
+              systems, ready to step in if something happens with your primary
+              Operator.
             </p>
           </div>
 
@@ -198,10 +199,10 @@ export default function WhatWeDo() {
                 </svg>
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                Community Owned
+                Locally Owned
               </h4>
               <p className="text-gray-600 text-sm">
-                Local ownership and control
+                Owned by communities, councils or housing associations
               </p>
             </div>
           </div>
