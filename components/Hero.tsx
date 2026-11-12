@@ -6,9 +6,9 @@ export default function Hero() {
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
             The Foundry
           </h1>
-          <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Helping communities build smart local energy systems across the
-            South-West
+          <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto text-balance">
+            Helping communities build smart local energy systems across the{" "}
+            <span className="whitespace-nowrap">South-West</span>
           </p>
           <p className="text-lg text-gray-700 mb-10 max-w-2xl mx-auto">
             We work with local communities who seek to own and operate local

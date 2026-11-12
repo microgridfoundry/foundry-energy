@@ -10,10 +10,11 @@ export default function WhatWeDo() {
             Operating Tomorrow's Energy Communities Today
           </h3>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            The Foundry operates community-owned energy systems in the
-            South-West of the UK. We handle the complex technical and regulatory
-            work so communities can enjoy the benefits of clean, affordable
-            local energy.
+            The Foundry operates community-owned energy systems in the{" "}
+            <span className="whitespace-nowrap">South-West</span>{" "}
+            of the UK. We handle the complex technical and regulatory work so
+            communities can enjoy the benefits of clean, affordable local
+            energy.
           </p>
         </div>
 
