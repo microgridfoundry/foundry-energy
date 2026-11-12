@@ -195,7 +195,7 @@ export const handler: HandlerByMethod<unknown, unknown> = {
 
       // Get recipient email (defaults to a fallback)
       const toEmail = Deno.env.get("CONTACT_EMAIL") ||
-        "hello@microgridfoundry.co.uk";
+        "hello@foundry.energy";
       const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") ||
         "onboarding@resend.dev";
 

@@ -33,7 +33,7 @@ if (import.meta.main) {
   const port = parseInt(Deno.env.get("PORT") || "8000");
   const hostname = "0.0.0.0";
   console.log(
-    `Starting Microgrid Foundry website on http://${hostname}:${port}`,
+    `Starting The Foundry website on http://${hostname}:${port}`,
   );
   await app.listen({ port, hostname });
 }

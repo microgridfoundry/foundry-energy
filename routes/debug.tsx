@@ -1,4 +1,4 @@
-export const title = "Debug Page - Microgrid Foundry";
+export const title = "Debug Page - The Foundry";
 
 import { getComponentVersions } from "../lib/versions.ts";
 
@@ -10,7 +10,9 @@ export default async function DebugPage() {
   }
 
   // Detect environment
-  const isProduction = Deno.env.get("DENO_DEPLOY") === "true";
+  // Production on Deno Deploy (DENO_DEPLOY) or Fly.io (FLY_APP_NAME)
+  const isProduction = Deno.env.get("DENO_DEPLOY") === "true" ||
+    Boolean(Deno.env.get("FLY_APP_NAME"));
   const environmentBadge = isProduction ? "🚀 PRODUCTION" : "💻 DEVELOPMENT";
   const badgeClasses = isProduction
     ? "px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-300"
@@ -54,7 +56,7 @@ export default async function DebugPage() {
     "RESEND_FROM_EMAIL": Deno.env.get("RESEND_FROM_EMAIL") ||
       "not set (will use default: onboarding@resend.dev)",
     "CONTACT_EMAIL": Deno.env.get("CONTACT_EMAIL") ||
-      "not set (will use default: hello@microgridfoundry.co.uk)",
+      "not set (will use default: hello@foundry.energy)",
   };
 
   // All environment variables (masked for security)
@@ -367,7 +369,7 @@ export default async function DebugPage() {
 
         {/* Footer */}
         <footer class="text-center text-sm text-gray-600 mt-12 pb-4">
-          <p>Microgrid Foundry Debug Page</p>
+          <p>The Foundry Debug Page</p>
           <p class="text-xs text-gray-500 mt-1">
             Generated at {new Date().toISOString()}
           </p>

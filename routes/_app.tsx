@@ -1,7 +1,7 @@
 import { type PageProps } from "fresh";
 export { asset } from "fresh/runtime";
 
-export const title = "Microgrid Foundry";
+export const title = "The Foundry";
 
 export default function App({ Component }: PageProps) {
   return (

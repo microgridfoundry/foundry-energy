@@ -4,13 +4,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-4">Microgrid Foundry</h3>
+            <h3 className="text-2xl font-bold mb-4">The Foundry</h3>
             <p className="text-gray-300 mb-4 max-w-md">
               Independent operator of UK energy communities, powered by
               Simtricity Energy Communities platform.
             </p>
             <p className="text-gray-400 text-sm">
-              © 2025 MICROGRID FOUNDRY LIMITED<br />
+              © 2026 MICROGRID FOUNDRY LIMITED, TRADING AS THE FOUNDRY<br />
               Company number 11780032
             </p>
           </div>

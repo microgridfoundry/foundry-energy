@@ -40,7 +40,7 @@ export default function ContactPage(_props: PageProps) {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Microgrid Foundry Location"
+                  title="The Foundry Location"
                   className="w-full h-full"
                 >
                 </iframe>
