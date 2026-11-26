@@ -25,8 +25,26 @@ Dependencies are pinned through `deno.lock` (committed). After changing
 
 ## Deployment
 
-Production runs on **Fly.io** only (app `foundry-energy-mgf`, org
-`microgridfoundry`, region `lhr`).
+The site runs on **Fly.io** only, as two apps in org `microgridfoundry` (region
+`lhr`). Deploys are **manual** — merging to `main` deploys nothing.
+
+|         | prod                                                | prev                                                     |
+| ------- | --------------------------------------------------- | -------------------------------------------------------- |
+| App     | `foundry-energy-mgf`                                | `foundry-energy-mgf-prev`                                |
+| URL     | https://foundry.energy (+ www)                      | https://prev.foundry.energy                              |
+| Config  | `fly.toml` (`APP_ENV=prod`, 1 machine always on)    | `fly.prev.toml` (`APP_ENV=prev`, scales to zero)         |
+| Deploy  | `fly deploy --remote-only` (from `main`)            | `fly deploy -c fly.prev.toml --remote-only` (any branch) |
+| Doppler | `foundry-energy-mgf` → `prod`, synced automatically | `foundry-energy-mgf` → `prev`, synced automatically      |
+
+Workflow: branch → local (`PORT=8770 deno task dev`) → deploy the branch to prev
+and review at prev.foundry.energy → PR → merge → deploy `main` to prod. Prev is
+shared: the last deploy wins.
+
+`APP_ENV` (read by `lib/env.ts`) drives the differences: on prev every response
+carries `X-Robots-Tag: noindex, nofollow`, `/robots.txt` disallows everything,
+and the debug page shows PREVIEW.
+
+**Prod details**
 
 - Serves https://foundry.energy and https://www.foundry.energy (Fly certs; DNS
   in DNSimple: apex A `66.241.125.129` / AAAA `2a09:8280:1::1ff:bc4:0`, `www`
@@ -34,17 +52,30 @@ Production runs on **Fly.io** only (app `foundry-energy-mgf`, org
 - `microgridfoundry.uk` and `www.microgridfoundry.uk` are DNSimple URL records
   that 301 to https://foundry.energy, keeping the path. Keep the domain
   registered — old links and mail depend on it.
-- Deploys are **manual** for now:
-  `fly deploy -a foundry-energy-mgf --remote-only` (no GitHub Action yet).
-  Merging to `main` does NOT deploy to Fly.
 - Built from `Dockerfile`: Deno 2.9.7, `deno install --frozen`, then
   `deno task build`. Keep `.gitignore` in the Docker context — Tailwind uses it
   to skip `node_modules` when scanning for classes.
-- No secrets yet, so the contact form returns 503 there. Plan: Doppler project
-  `foundry-energy-mgf` (`local`/`prev`/`prod`) with native Fly sync.
+- Secrets live in Doppler project `foundry-energy-mgf` (`local`/`prev`/`prod`)
+  in the **mgf** workplace (not Simtricity). Doppler is canonical: change values
+  in Doppler, never on Fly directly. Two Fly integrations, each with an
+  app-scoped deploy token, push the configs and restart the machines:
+  `fly-foundry-energy-mgf` (`prod` → `foundry-energy-mgf`) and
+  `fly-foundry-energy-mgf-prev` (`prev` → `foundry-energy-mgf-prev`). Fly lists
+  synced secrets as "Staged"; the restart applies them anyway.
+- The Doppler CLI is logged into the mgf workplace for
+  `/Users/damonrand/operators/mgf` only (`doppler login --scope …`); elsewhere
+  it uses Simtricity. Check with `doppler me` from this repo.
+- Contact form mail: Resend **foundry** account, sending-only keys
+  `foundry-energy-mgf-prod` / `foundry-energy-mgf-prev` (restricted to
+  `microgridfoundry.uk`, the only verified sending domain there). Sender
+  `The Foundry <website@microgridfoundry.uk>`. prod → `hello@foundry.energy`
+  (ImprovMX); prev → the mock mailbox `damon@acme.simtricity.com`, readable with
+  `/simt-local:resend mailbox list`. Open item: verify `foundry.energy` in
+  Resend and switch the sender.
 
-There are no branch previews. Test locally (`PORT=8770 deno task dev`) before
-deploying; if previews are needed, add a `foundry-energy-mgf-prev` app.
+**Prev details:** `prev` CNAME → `foundry-energy-mgf-prev.fly.dev` in DNSimple,
+with a Fly cert. The first request after idling wakes the machine (a second or
+two).
 
 History: the site ran on Deno Deploy (app `microgridfoundry-uk`, org `simt`)
 until the 2026-11-12 cut-over; that app and the old Fly app of the same name
@@ -95,9 +126,11 @@ routes/           # File-system based routing
   contact.tsx     # Contact page
   debug.tsx       # Debug/diagnostics page
   _404.tsx        # Not-found page (returns HTTP 404)
+  robots.txt.ts   # /robots.txt — Disallow all on prev, Allow on prod
 components/       # Server-side rendered components (Nav, Hero, Communities, etc.)
 islands/          # Interactive client-side components (ContactForm)
 lib/versions.ts   # Reads deno.json imports for the debug page
+lib/env.ts        # appEnv(): prod / prev / local from APP_ENV
 static/           # Static assets served at root path (/filename.jpg)
 _assets_src/      # Higher-resolution image masters (not served)
 ```
@@ -140,8 +173,9 @@ copy:
 
 Required for contact form functionality:
 
-- `RESEND_API_KEY` - Resend API key for sending emails
-- `CONTACT_EMAIL` - Recipient email (default: hello@microgridfoundry.co.uk)
+- `RESEND_API_KEY` - Resend API key for sending emails (without it the form
+  returns 503)
+- `CONTACT_EMAIL` - Recipient email (default: hello@foundry.energy)
 - `RESEND_FROM_EMAIL` - Sender email (default: onboarding@resend.dev)
 - `PORT` - Server port (default: 8000)
 

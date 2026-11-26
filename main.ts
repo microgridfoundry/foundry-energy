@@ -5,8 +5,18 @@
 /// <reference lib="deno.ns" />
 
 import { App, staticFiles } from "fresh";
+import { isPrev } from "./lib/env.ts";
 
 export const app = new App();
+
+// prev: tell search engines not to index anything (pages, images, CSS)
+app.use(async (ctx) => {
+  const res = await ctx.next();
+  if (!isPrev()) return res;
+  const tagged = new Response(res.body, res);
+  tagged.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return tagged;
+});
 
 // Request logging middleware
 app.use(async (ctx) => {
