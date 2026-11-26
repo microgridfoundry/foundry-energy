@@ -65,8 +65,13 @@ and the debug page shows PREVIEW.
 - The Doppler CLI is logged into the mgf workplace for
   `/Users/damonrand/operators/mgf` only (`doppler login --scope …`); elsewhere
   it uses Simtricity. Check with `doppler me` from this repo.
-- Until values are in Doppler the contact form returns 503. On prev, point
-  `CONTACT_EMAIL` at a test address, not the real inbox.
+- Contact form mail: Resend **foundry** account, sending-only keys
+  `foundry-energy-mgf-prod` / `foundry-energy-mgf-prev` (restricted to
+  `microgridfoundry.uk`, the only verified sending domain there). Sender
+  `The Foundry <website@microgridfoundry.uk>`. prod → `hello@foundry.energy`
+  (ImprovMX); prev → the mock mailbox `damon@acme.simtricity.com`, readable with
+  `/simt-local:resend mailbox list`. Open item: verify `foundry.energy` in
+  Resend and switch the sender.
 
 **Prev details:** `prev` CNAME → `foundry-energy-mgf-prev.fly.dev` in DNSimple,
 with a Fly cert. The first request after idling wakes the machine (a second or
@@ -168,8 +173,9 @@ copy:
 
 Required for contact form functionality:
 
-- `RESEND_API_KEY` - Resend API key for sending emails
-- `CONTACT_EMAIL` - Recipient email (default: hello@microgridfoundry.co.uk)
+- `RESEND_API_KEY` - Resend API key for sending emails (without it the form
+  returns 503)
+- `CONTACT_EMAIL` - Recipient email (default: hello@foundry.energy)
 - `RESEND_FROM_EMAIL` - Sender email (default: onboarding@resend.dev)
 - `PORT` - Server port (default: 8000)
 
