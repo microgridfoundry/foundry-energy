@@ -28,13 +28,13 @@ Dependencies are pinned through `deno.lock` (committed). After changing
 The site runs on **Fly.io** only, as two apps in org `microgridfoundry` (region
 `lhr`). Deploys are **manual** — merging to `main` deploys nothing.
 
-|         | prod                                             | prev                                                     |
-| ------- | ------------------------------------------------ | -------------------------------------------------------- |
-| App     | `foundry-energy-mgf`                             | `foundry-energy-mgf-prev`                                |
-| URL     | https://foundry.energy (+ www)                   | https://prev.foundry.energy                              |
-| Config  | `fly.toml` (`APP_ENV=prod`, 1 machine always on) | `fly.prev.toml` (`APP_ENV=prev`, scales to zero)         |
-| Deploy  | `fly deploy --remote-only` (from `main`)         | `fly deploy -c fly.prev.toml --remote-only` (any branch) |
-| Doppler | `foundry-energy-mgf` → `prod`                    | `foundry-energy-mgf` → `prev`                            |
+|         | prod                                              | prev                                                     |
+| ------- | ------------------------------------------------- | -------------------------------------------------------- |
+| App     | `foundry-energy-mgf`                              | `foundry-energy-mgf-prev`                                |
+| URL     | https://foundry.energy (+ www)                    | https://prev.foundry.energy                              |
+| Config  | `fly.toml` (`APP_ENV=prod`, 1 machine always on)  | `fly.prev.toml` (`APP_ENV=prev`, scales to zero)         |
+| Deploy  | `fly deploy --remote-only` (from `main`)          | `fly deploy -c fly.prev.toml --remote-only` (any branch) |
+| Doppler | `foundry-energy-mgf` → `prod`, **copied by hand** | `foundry-energy-mgf` → `prev`, **synced automatically**  |
 
 Workflow: branch → local (`PORT=8770 deno task dev`) → deploy the branch to prev
 and review at prev.foundry.energy → PR → merge → deploy `main` to prod. Prev is
@@ -55,11 +55,21 @@ and the debug page shows PREVIEW.
 - Built from `Dockerfile`: Deno 2.9.7, `deno install --frozen`, then
   `deno task build`. Keep `.gitignore` in the Docker context — Tailwind uses it
   to skip `node_modules` when scanning for classes.
-- Secrets come from Doppler project `foundry-energy-mgf` (`local`/`prev`/`prod`)
-  through Doppler's native Fly integration (`prev` → `foundry-energy-mgf-prev`,
-  `prod` → `foundry-energy-mgf`). Never `fly secrets set` these names — the sync
-  overwrites them. Until values are in Doppler the contact form returns 503. On
-  prev, point `CONTACT_EMAIL` at a test address, not the real inbox.
+- Secrets live in Doppler project `foundry-energy-mgf` (`local`/`prev`/`prod`);
+  Doppler is canonical for both environments. Change values in Doppler, never on
+  Fly directly.
+  - **prev** syncs automatically: Doppler's Fly integration
+    `fly-foundry-energy-mgf-prev` (app-scoped deploy token) pushes `prev` to
+    `foundry-energy-mgf-prev` and restarts its machines.
+  - **prod** is copied by hand, because the Simtricity workplace's Doppler
+    Developer plan allows only 5 config syncs and they are all in use. After
+    changing `prod` in Doppler, run:
+    `doppler secrets download -p foundry-energy-mgf -c prod --no-file --format env | fly secrets import -a foundry-energy-mgf`
+    (Fly restarts the machine). Integration `fly-foundry-energy-mgf` already
+    exists in Doppler, so if a sync slot frees up or the plan is upgraded, add
+    the `prod` sync and drop this step.
+- Until values are in Doppler the contact form returns 503. On prev, point
+  `CONTACT_EMAIL` at a test address, not the real inbox.
 
 **Prev details:** `prev` CNAME → `foundry-energy-mgf-prev.fly.dev` in DNSimple,
 with a Fly cert. The first request after idling wakes the machine (a second or
